@@ -476,4 +476,4 @@ appont:target  rdf:type owl:DatatypeProperty; rdfs:label "target"@en.
 appont:opList  rdf:type owl:ObjectProperty; rdfs:label "list"@en .
 
 [] a owl:AllDisjointClasses ;
-    owl:members ( appont:TransformationMatrix2x2 appont:TransformationMatrix3x4 appont:TransformationMatrix4x4 )
+    owl:members ( appont:TransformationMatrix2x2 appont:TransformationMatrix3x4 appont:TransformationMatrix4x4 ) .
