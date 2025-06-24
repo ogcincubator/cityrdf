@@ -1,8 +1,9 @@
 @prefix appont: <https://www.opengis.net/ont/appearance/> .
-#@prefix core: <https://www.opengis.net/ont/citygml/core/> .
 @prefix gmlowl: <http://www.opengis.net/ont/gml#> .
+@prefix geo: <http://www.opengis.net/ont/geosparql#> .
 @prefix iso19111-2007: <http://def.isotc211.org/iso19111/2007/CoordinateReferenceSystems#> .
 @prefix iso19150-2: <http://def.isotc211.org/iso19150/-2/2012/base#> .
+@prefix iso19109: <http://def.isotc211.org/iso19109/2015/GeneralFeatureModel#> .
 @prefix owl: <http://www.w3.org/2002/07/owl#> .
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
@@ -14,11 +15,9 @@
     rdfs:label "Appearance"@en ;
     owl:imports <http://def.isotc211.org/iso19150/-2/2012/base>,
         <http://www.opengis.net/ont/gml>;
-#        <https://www.opengis.net/ont/citygml/common>,
-#        <https://www.opengis.net/ont/citygml/core> ;
-    owl:versionIRI <https://www.opengis.net/ont/citygml/appearance/3.0.0/> ;
+    owl:versionIRI <https://www.opengis.net/ont/appearance/3.0.0/> ;
     owl:versionInfo "3.0.0" ;
-    skos:definition "The Appearance module supports the modelling of the observable surface properties of CityGML features in the form of textures and material."@en .
+    skos:definition "The Appearance ontology extracted from CityGML module. Supports the modelling of the observable surface properties of features in the form of textures and material."@en .
 
 appont:surfaceData a owl:ObjectProperty ;
     rdfs:label "surfaceData"@en ;
@@ -38,14 +37,14 @@ appont:Appearance a owl:Class ;
             owl:maxQualifiedCardinality "1"^^xsd:nonNegativeInteger ;
             owl:onDataRange xsd:string ;
             owl:onProperty appont:theme ],
-        core:AbstractAppearance ;
+        iso19109:AnyFeature ;
     skos:definition "An Appearance is a collection of surface data, i.e. observable properties for surface geometry objects in the form of textures and material."@en .
 
 appont:ParameterizedTexture a owl:Class ;
     rdfs:label "ParameterizedTexture"@en ;
     rdfs:subClassOf [ a owl:Restriction ;
             owl:allValuesFrom appont:TextureAssociation ;
-            owl:onProperty <https://www.opengis.net/ont/citygml/common/textureParameterization> ],
+            owl:onProperty appont:textureParameterization ],
         appont:AbstractTexture ;
     skos:definition "A ParameterizedTexture is a texture that uses texture coordinates or a transformation matrix for parameterization."@en .
 
@@ -183,12 +182,12 @@ appont:wrapMode a owl:DatatypeProperty ;
     rdfs:range appont:WrapMode ;
     skos:definition "Specifies the behaviour of the texture when the texture is smaller than the surface to which it is applied."@en .
 
-<https://www.opengis.net/ont/citygml/common/mimeType> rdfs:label "mimeType"@en ;
+appont:mimeType rdfs:label "mimeType"@en ;
     skos:definition "Specifies the MIME type of the external point cloud file."@en ;
     schema:domainIncludes appont:AbstractTexture ;
-    schema:rangeIncludes core:MimeTypeValue .
+    schema:rangeIncludes appont:MimeTypeValue .
 
-<https://www.opengis.net/ont/citygml/common/referencePoint> skos:definition "Relates to the 2D Point geometry that represents the center of the upper left image pixel in world space."@en ;
+appont:mimeType skos:definition "Relates to the 2D Point geometry that represents the center of the upper left image pixel in world space."@en ;
     schema:domainIncludes appont:GeoreferencedTexture ;
     schema:rangeIncludes gmlowl:Point .
 
@@ -223,7 +222,7 @@ appont:WrapMode a rdfs:Datatype ;
             owl:oneOf ( "none" "wrap" "mirror" "clamp" "border" ) ] ;
     skos:definition "WrapMode enumerates the different fill modes for textures."@en .
 
-<https://www.opengis.net/ont/citygml/common/textureParameterization> skos:definition "Relates to the texture coordinates or transformation matrices used for parameterization."@en ;
+appont:textureParameterization skos:definition "Relates to the texture coordinates or transformation matrices used for parameterization."@en ;
     schema:domainIncludes appont:ParameterizedTexture,
         appont:TextureAssociation ;
     schema:rangeIncludes appont:AbstractTextureParameterization,
@@ -238,17 +237,17 @@ appont:GeoreferencedTexture a owl:Class ;
     rdfs:label "GeoreferencedTexture"@en ;
     rdfs:subClassOf [ a owl:Restriction ;
             owl:allValuesFrom xsd:anyURI ;
-            owl:onProperty <https://www.opengis.net/ont/citygml/common/target> ],
+            owl:onProperty appont:target ],
         [ a owl:Restriction ;
             owl:allValuesFrom xsd:boolean ;
             owl:onProperty appont:preferWorldFile ],
         [ a owl:Restriction ;
             owl:maxQualifiedCardinality "1"^^xsd:nonNegativeInteger ;
             owl:onClass gmlowl:Point ;
-            owl:onProperty <https://www.opengis.net/ont/citygml/common/referencePoint> ],
+            owl:onProperty appont:mimeType ],
         [ a owl:Restriction ;
             owl:allValuesFrom gmlowl:Point ;
-            owl:onProperty <https://www.opengis.net/ont/citygml/common/referencePoint> ],
+            owl:onProperty appont:mimeType ],
         [ a owl:Restriction ;
             owl:maxQualifiedCardinality "1"^^xsd:nonNegativeInteger ;
             owl:onDataRange xsd:boolean ;
@@ -268,21 +267,21 @@ appont:TextureAssociation a owl:Class ;
     rdfs:label "TextureAssociation"@en ;
     rdfs:subClassOf [ a owl:Restriction ;
             owl:allValuesFrom xsd:anyURI ;
-            owl:onProperty <https://www.opengis.net/ont/citygml/common/target> ],
+            owl:onProperty appont:target ],
         [ a owl:Restriction ;
             owl:onDataRange xsd:anyURI ;
-            owl:onProperty <https://www.opengis.net/ont/citygml/common/target> ;
+            owl:onProperty appont:target ;
             owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ],
         [ a owl:Restriction ;
             owl:allValuesFrom appont:AbstractTextureParameterization ;
-            owl:onProperty <https://www.opengis.net/ont/citygml/common/textureParameterization> ],
+            owl:onProperty appont:textureParameterization ],
         [ a owl:Restriction ;
             owl:onClass appont:AbstractTextureParameterization ;
-            owl:onProperty <https://www.opengis.net/ont/citygml/common/textureParameterization> ;
+            owl:onProperty appont:textureParameterization ;
             owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ] ;
     skos:definition "TextureAssociation denotes the relation of a texture to a surface geometry object."@en .
 
-<https://www.opengis.net/ont/citygml/common/target> rdfs:label "target"@en ;
+appont:target rdfs:label "target"@en ;
     skos:definition "Specifies the URI that points to the surface geometry object to which the texture is applied."@en,
         "Specifies the URI that points to the surface geometry objects to which the material is applied."@en,
         "Specifies the URI that points to the surface geometry objects to which the texture is applied."@en ;
@@ -301,7 +300,7 @@ appont:AbstractSurfaceData a owl:Class ;
             owl:maxQualifiedCardinality "1"^^xsd:nonNegativeInteger ;
             owl:onDataRange xsd:boolean ;
             owl:onProperty appont:isFront ],
-        core:AbstractFeature ;
+        iso19109:AnyFeature ;
     skos:definition "AbstractSurfaceData is the abstract superclass for different kinds of textures and material."@en .
 
 appont:AbstractTextureParameterization a owl:Class ;
@@ -324,8 +323,8 @@ appont:AbstractTexture a owl:Class ;
             owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ],
         [ a owl:Restriction ;
             owl:maxQualifiedCardinality "1"^^xsd:nonNegativeInteger ;
-            owl:onClass core:MimeTypeValue ;
-            owl:onProperty <https://www.opengis.net/ont/citygml/common/mimeType> ],
+            owl:onClass appont:MimeTypeValue ;
+            owl:onProperty appont:mimeType ],
         [ a owl:Restriction ;
             owl:maxQualifiedCardinality "1"^^xsd:nonNegativeInteger ;
             owl:onDataRange appont:WrapMode ;
@@ -341,8 +340,8 @@ appont:AbstractTexture a owl:Class ;
             owl:allValuesFrom appont:WrapMode ;
             owl:onProperty appont:wrapMode ],
         [ a owl:Restriction ;
-            owl:allValuesFrom core:MimeTypeValue ;
-            owl:onProperty <https://www.opengis.net/ont/citygml/common/mimeType> ],
+            owl:allValuesFrom appont:MimeTypeValue ;
+            owl:onProperty appont:mimeType ],
         [ a owl:Restriction ;
             owl:maxQualifiedCardinality "1"^^xsd:nonNegativeInteger ;
             owl:onClass appont:ColorPlusOpacity ;
@@ -399,7 +398,7 @@ appont:X3DMaterial a owl:Class ;
             owl:onProperty appont:ambientIntensity ],
         [ a owl:Restriction ;
             owl:allValuesFrom xsd:anyURI ;
-            owl:onProperty <https://www.opengis.net/ont/citygml/common/target> ],
+            owl:onProperty appont:target ],
         [ a owl:Restriction ;
             owl:maxQualifiedCardinality "1"^^xsd:nonNegativeInteger ;
             owl:onClass appont:Color ;
@@ -424,18 +423,23 @@ appont:TransformationMatrix3x4 a owl:Class ;
     rdfs:subClassOf appont:DoubleList ;
     skos:definition "TransformationMatrix3x4 is a 3 by 4 matrix represented as a list of twelve double values in row major order."@en .
 
+appont:TransformationMatrix4x4 a owl:Class ;
+    rdfs:label "TransformationMatrix4x4"@en ;
+    rdfs:subClassOf appont:DoubleList ;
+    skos:definition "TransformationMatrix4x4 is a 4 by 4 matrix represented as a list of sixteen double values in row major order."@en .
+
 appont:DoubleList a owl:Class ;
     rdfs:label "DoubleList"@en ;
     rdfs:subClassOf [ a owl:Restriction ;
                           owl:allValuesFrom xsd:double ;
-                          owl:onProperty appont:list ],
+                          owl:onProperty appont:dpList ],
                         [ a owl:Restriction ;
                               owl:onDataRange xsd:double ;
-                              owl:onProperty appont:list ;
+                              owl:onProperty appont:dpList ;
                               owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ] ;
     skos:definition "DoubleList is an ordered sequence of double values."@en .
 
-appont:list a owl:DatatypeProperty ;
+appont:dpList a owl:DatatypeProperty ;
     rdfs:label "list"@en ;
     rdfs:domain appont:DoubleList ;
     rdfs:range xsd:double ;
@@ -449,10 +453,27 @@ appont:DoubleBetween0and1List a owl:Class ;
     rdfs:label "DoubleBetween0and1List"@en ;
     rdfs:subClassOf [ a owl:Restriction ;
                           owl:allValuesFrom appont:DoubleBetween0and1 ;
-                          owl:onProperty <https://www.opengis.net/ont/citygml/common/list> ],
+                          owl:onProperty appont:opList ],
                         [ a owl:Restriction ;
                               owl:onClass appont:DoubleBetween0and1 ;
-                              owl:onProperty <https://www.opengis.net/ont/citygml/common/list> ;
+                              owl:onProperty appont:opList ;
                               owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ] ;
     skos:definition "DoubleBetween0and1List is a basic type that represents a list of double values greater or equal than 0 and less or equal than 1. The type is used for color encoding, for example."@en .
 
+appont:MimeTypeValue a owl:Class ;
+    rdfs:label "MimeTypeValue"@en ;
+    rdfs:subClassOf skos:Concept ;
+    skos:definition "MimeTypeValue is a code list used to specify the MIME type of a referenced resource."@en .
+
+appont:textureParameterization  rdf:type owl:ObjectProperty; rdfs:label "textureParameterization"@en .
+
+appont:mimeType rdf:type owl:ObjectProperty; rdfs:label "mimeType"@en.
+
+appont:referencePoint rdfs:subPropertyOf geo:hasGeometry .
+
+appont:target  rdf:type owl:DatatypeProperty; rdfs:label "target"@en.
+
+appont:opList  rdf:type owl:ObjectProperty; rdfs:label "list"@en .
+
+[] a owl:AllDisjointClasses ;
+    owl:members ( appont:TransformationMatrix2x2 appont:TransformationMatrix3x4 appont:TransformationMatrix4x4 )

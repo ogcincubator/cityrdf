@@ -116,17 +116,6 @@ core:ClosureSurface a owl:Class ;
     rdfs:subClassOf core:AbstractThematicSurface ;
     skos:definition "ClosureSurface is a special type of thematic surface used to close holes in volumetric objects. Closure surfaces are virtual (non-physical) surfaces."@en .
 
-core:DoubleBetween0and1List a owl:Class ;
-    rdfs:label "DoubleBetween0and1List"@en ;
-    rdfs:subClassOf [ a owl:Restriction ;
-            owl:allValuesFrom core:DoubleBetween0and1 ;
-            owl:onProperty <https://www.opengis.net/ont/citygml/common/list> ],
-        [ a owl:Restriction ;
-            owl:onClass core:DoubleBetween0and1 ;
-            owl:onProperty <https://www.opengis.net/ont/citygml/common/list> ;
-            owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ] ;
-    skos:definition "DoubleBetween0and1List is a basic type that represents a list of double values greater or equal than 0 and less or equal than 1. The type is used for color encoding, for example."@en .
-
 core:DoubleOrNilReasonList a owl:Class ;
     rdfs:label "DoubleOrNilReasonList"@en ;
     rdfs:subClassOf [ a owl:Restriction ;
@@ -137,16 +126,6 @@ core:DoubleOrNilReasonList a owl:Class ;
             owl:onProperty <https://www.opengis.net/ont/citygml/common/list> ;
             owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ] ;
     skos:definition "DoubleOrNilReasonList is a basic type that represents a list of double values and/or nil reasons."@en .
-
-core:TransformationMatrix2x2 a owl:Class ;
-    rdfs:label "TransformationMatrix2x2"@en ;
-    rdfs:subClassOf core:DoubleList ;
-    skos:definition "TransformationMatrix2x2 is a 2 by 2 matrix represented as a list of four double values in row major order."@en .
-
-core:TransformationMatrix3x4 a owl:Class ;
-    rdfs:label "TransformationMatrix3x4"@en ;
-    rdfs:subClassOf core:DoubleList ;
-    skos:definition "TransformationMatrix3x4 is a 3 by 4 matrix represented as a list of twelve double values in row major order."@en .
 
 core:area a owl:DatatypeProperty ;
     rdfs:label "area"@en ;
@@ -524,10 +503,6 @@ core:CityModel a owl:Class ;
         core:AbstractFeatureWithLifespan ;
     skos:definition "CityModel is the container for all objects belonging to a city model."@en .
 
-core:DoubleBetween0and1 a owl:Class ;
-    rdfs:label "DoubleBetween0and1"@en ;
-    skos:definition "DoubleBetween0and1 is a basic type for values, which are greater or equal than 0 and less or equal than 1. The type is used for color encoding, for example."@en .
-
 core:IntervalValue a owl:Class ;
     rdfs:label "IntervalValue"@en ;
     rdfs:subClassOf skos:Concept ;
@@ -713,10 +688,8 @@ core:TransformationMatrix4x4 a owl:Class ;
 <https://www.opengis.net/ont/citygml/common/list> rdfs:label "list"@en ;
     skos:definition "Specifies the list of double values and/or nil reasons."@en,
         "Specifies the list of double values."@en ;
-    schema:domainIncludes core:DoubleBetween0and1List,
-        core:DoubleOrNilReasonList ;
-    schema:rangeIncludes core:DoubleBetween0and1,
-        core:DoubleOrNilReason .
+    schema:domainIncludes core:DoubleOrNilReasonList ;
+    schema:rangeIncludes core:DoubleOrNilReason .
 
 core:CityObjectRelation a owl:Class ;
     rdfs:label "CityObjectRelation"@en ;
@@ -1270,9 +1243,6 @@ core:AbstractCityObject a owl:Class ;
 
 [] a owl:AllDisjointClasses ;
     owl:members ( frn:CityFurniture con:AbstractConstruction con:AbstractConstructiveElement con:AbstractFillingElement con:AbstractFurniture con:AbstractInstallation gen:GenericOccupiedSpace veg:AbstractVegetationObject wtr:WaterBody ) .
-
-[] a owl:AllDisjointClasses ;
-    owl:members ( core:TransformationMatrix2x2 core:TransformationMatrix3x4 core:TransformationMatrix4x4 ) .
 
 [] a owl:AllDisjointClasses ;
     owl:members ( gen:CodeAttribute gen:DateAttribute gen:DoubleAttribute gen:GenericAttributeSet gen:IntAttribute gen:MeasureAttribute gen:StringAttribute gen:UriAttribute ) .
