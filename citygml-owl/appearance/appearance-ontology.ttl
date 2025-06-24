@@ -11,12 +11,10 @@
 @prefix skos: <http://www.w3.org/2004/02/skos/core#> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
-<https://www.opengis.net/ont/citygml/appearance> a owl:Ontology ;
+<https://www.opengis.net/ont/appearance/> a owl:Ontology ;
     rdfs:label "Appearance"@en ;
     owl:imports <http://def.isotc211.org/iso19150/-2/2012/base>,
         <http://www.opengis.net/ont/gml>;
-    owl:versionIRI <https://www.opengis.net/ont/appearance/3.0.0/> ;
-    owl:versionInfo "3.0.0" ;
     skos:definition "The Appearance ontology extracted from CityGML module. Supports the modelling of the observable surface properties of features in the form of textures and material."@en .
 
 appont:surfaceData a owl:ObjectProperty ;
