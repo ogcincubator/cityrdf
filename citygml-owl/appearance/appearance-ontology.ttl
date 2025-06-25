@@ -12,10 +12,12 @@
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
 <https://www.opengis.net/ont/appearance/> a owl:Ontology ;
-    rdfs:label "Appearance"@en ;
+    rdfs:label "Appearance Ontology"@en ;
     owl:imports <http://def.isotc211.org/iso19150/-2/2012/base>,
         <http://www.opengis.net/ont/gml>;
-    skos:definition "The Appearance ontology extracted from CityGML module. Supports the modelling of the observable surface properties of features in the form of textures and material."@en .
+    owl:versionIRI <https://www.opengis.net/ont/appearance/1.0.0/> ;
+    owl:versionInfo "1.0.0" ;
+    skos:definition "The Appearance ontology extracted from CityGML appearance module. Supports the modelling of the observable surface properties of features in the form of textures and material."@en .
 
 appont:surfaceData a owl:ObjectProperty ;
     rdfs:label "surfaceData"@en ;
@@ -430,14 +432,14 @@ appont:DoubleList a owl:Class ;
     rdfs:label "DoubleList"@en ;
     rdfs:subClassOf [ a owl:Restriction ;
                           owl:allValuesFrom xsd:double ;
-                          owl:onProperty appont:dpList ],
+                          owl:onProperty appont:list ],
                         [ a owl:Restriction ;
                               owl:onDataRange xsd:double ;
-                              owl:onProperty appont:dpList ;
+                              owl:onProperty appont:list ;
                               owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ] ;
     skos:definition "DoubleList is an ordered sequence of double values."@en .
 
-appont:dpList a owl:DatatypeProperty ;
+appont:list a owl:DatatypeProperty ;
     rdfs:label "list"@en ;
     rdfs:domain appont:DoubleList ;
     rdfs:range xsd:double ;

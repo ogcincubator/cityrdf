@@ -14,24 +14,26 @@
 
 <https://www.opengis.net/ont/citygml/appearance> a owl:Ontology ;
     rdfs:label "Appearance"@en ;
-    owl:imports <https://www.opengis.net/ont/appearance>;
+    owl:imports <https://www.opengis.net/ont/appearance> ,
+        <https://www.opengis.net/ont/citygml/common> ,
+        <https://www.opengis.net/ont/citygml/core> ;
     owl:versionIRI <https://www.opengis.net/ont/citygml/appearance/3.0.0/> ;
     owl:versionInfo "3.0.0" ;
     skos:definition "The Appearance module supports the modelling of the observable surface properties of CityGML features in the form of textures and material."@en .
 
 app:Appearance a owl:Class ;
-    rdfs:subClassOf appont:Appearance ,
-        core:AbstractAppearance .
+    rdfs:subClassOf core:AbstractAppearance ,
+        appont:Appearance ;
+         .
 
 app:AbstractSurfaceData a owl:Class ;
-    rdfs:subClassOf appont:AbstractSurfaceData,
-        core:AbstractFeature .
+    rdfs:subClassOf core:AbstractFeature ,
+             appont:AbstractSurfaceData;
+         .
 
 appont:DoubleList owl:equivalentClass core:DoubleList .
 
 appont:MimeTypeValue owl:equivalentClass core:MimeTypeValue .
-
-appont:dpList owl:equivalentProperty core:list .
 
 appont:TransformationMatrix4x4 owl:equivalentClass core:TransformationMatrix4x4 .
 
@@ -43,5 +45,4 @@ appont:referencePoint owl:equivalentProperty common:referencePoint .
 
 appont:target  owl:equivalentProperty common:target .
 
-appont:opList  owl:equivalentProperty common:opList .
-
+appont:opList  owl:equivalentProperty common:list .
