@@ -1,0 +1,479 @@
+@prefix appont: <https://www.opengis.net/ont/appearance/> .
+@prefix gmlowl: <http://www.opengis.net/ont/gml#> .
+@prefix geo: <http://www.opengis.net/ont/geosparql#> .
+@prefix iso19111-2007: <http://def.isotc211.org/iso19111/2007/CoordinateReferenceSystems#> .
+@prefix iso19150-2: <http://def.isotc211.org/iso19150/-2/2012/base#> .
+@prefix iso19109: <http://def.isotc211.org/iso19109/2015/GeneralFeatureModel#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix schema: <https://schema.org/> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<https://www.opengis.net/ont/appearance/> a owl:Ontology ;
+    rdfs:label "Appearance Ontology"@en ;
+    owl:imports <http://def.isotc211.org/iso19150/-2/2012/base>,
+        <http://www.opengis.net/ont/gml>;
+    owl:versionIRI <https://www.opengis.net/ont/appearance/1.0.0/> ;
+    owl:versionInfo "1.0.0" ;
+    skos:definition "The Appearance ontology extracted from CityGML appearance module. Supports the modelling of the observable surface properties of features in the form of textures and material."@en .
+
+appont:surfaceData a owl:ObjectProperty ;
+    rdfs:label "surfaceData"@en ;
+    rdfs:domain appont:Appearance ;
+    rdfs:range appont:AbstractSurfaceData ;
+    skos:definition "Relates to the surface data that are part of the Appearance."@en .
+
+appont:Appearance a owl:Class ;
+    rdfs:label "Appearance"@en ;
+    rdfs:subClassOf [ a owl:Restriction ;
+            owl:allValuesFrom appont:AbstractSurfaceData ;
+            owl:onProperty appont:surfaceData ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom xsd:string ;
+            owl:onProperty appont:theme ],
+        [ a owl:Restriction ;
+            owl:maxQualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+            owl:onDataRange xsd:string ;
+            owl:onProperty appont:theme ],
+        iso19109:AnyFeature ;
+    skos:definition "An Appearance is a collection of surface data, i.e. observable properties for surface geometry objects in the form of textures and material."@en .
+
+appont:ParameterizedTexture a owl:Class ;
+    rdfs:label "ParameterizedTexture"@en ;
+    rdfs:subClassOf [ a owl:Restriction ;
+            owl:allValuesFrom appont:TextureAssociation ;
+            owl:onProperty appont:textureParameterization ],
+        appont:AbstractTexture ;
+    skos:definition "A ParameterizedTexture is a texture that uses texture coordinates or a transformation matrix for parameterization."@en .
+
+appont:TexCoordGen a owl:Class ;
+    rdfs:label "TexCoordGen"@en ;
+    rdfs:subClassOf [ a owl:Restriction ;
+            owl:allValuesFrom iso19111-2007:SC_CRS ;
+            owl:onProperty appont:crs ],
+        [ a owl:Restriction ;
+            owl:maxQualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+            owl:onClass iso19111-2007:SC_CRS ;
+            owl:onProperty appont:crs ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom appont:TransformationMatrix3x4 ;
+            owl:onProperty appont:worldToTexture ],
+        [ a owl:Restriction ;
+            owl:onClass appont:TransformationMatrix3x4 ;
+            owl:onProperty appont:worldToTexture ;
+            owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ],
+        appont:AbstractTextureParameterization ;
+    owl:disjointWith appont:TexCoordList ;
+    skos:definition "TexCoordGen defines texture parameterization using a transformation matrix."@en .
+
+appont:ambientIntensity a owl:ObjectProperty ;
+    rdfs:label "ambientIntensity"@en ;
+    rdfs:domain appont:X3DMaterial ;
+    rdfs:range appont:DoubleBetween0and1 ;
+    skos:definition "Specifies the minimum percentage of diffuseColor that is visible regardless of light sources."@en .
+
+appont:borderColor a owl:ObjectProperty ;
+    rdfs:label "borderColor"@en ;
+    rdfs:domain appont:AbstractTexture ;
+    rdfs:range appont:ColorPlusOpacity ;
+    skos:definition "Specifies the color of that part of the surface that is not covered by the texture."@en .
+
+appont:crs a owl:ObjectProperty ;
+    rdfs:label "crs"@en ;
+    rdfs:domain appont:TexCoordGen ;
+    rdfs:range iso19111-2007:SC_CRS ;
+    skos:definition "Relates to the coordinate reference system of the transformation matrix."@en .
+
+appont:diffuseColor a owl:ObjectProperty ;
+    rdfs:label "diffuseColor"@en ;
+    rdfs:domain appont:X3DMaterial ;
+    rdfs:range appont:Color ;
+    skos:definition "Specifies the color of the light diffusely reflected by the surface geometry object."@en .
+
+appont:emissiveColor a owl:ObjectProperty ;
+    rdfs:label "emissiveColor"@en ;
+    rdfs:domain appont:X3DMaterial ;
+    rdfs:range appont:Color ;
+    skos:definition "Specifies the color of the light emitted by the surface geometry object."@en .
+
+appont:imageURI a owl:DatatypeProperty ;
+    rdfs:label "imageURI"@en ;
+    rdfs:domain appont:AbstractTexture ;
+    rdfs:range xsd:anyURI ;
+    skos:definition "Specifies the URI that points to the external image data file."@en .
+
+appont:isFront a owl:DatatypeProperty ;
+    rdfs:label "isFront"@en ;
+    rdfs:domain appont:AbstractSurfaceData ;
+    rdfs:range xsd:boolean ;
+    skos:definition "Indicates whether the texture or material is assigned to the front side or the back side of the surface geometry object."@en .
+
+appont:isSmooth a owl:DatatypeProperty ;
+    rdfs:label "isSmooth"@en ;
+    rdfs:domain appont:X3DMaterial ;
+    rdfs:range xsd:boolean ;
+    skos:definition "Specifies which interpolation method is used for the shading of the surface geometry object. If the attribute is set to true, vertex normals should be used for shading (Gouraud shading). Otherwise, normals should be constant for a surface patch (flat shading)."@en .
+
+appont:orientation a owl:ObjectProperty ;
+    rdfs:label "orientation"@en ;
+    rdfs:domain appont:GeoreferencedTexture ;
+    rdfs:range appont:TransformationMatrix2x2 ;
+    skos:definition "Specifies the rotation and scaling of the image in form of a 2x2 matrix."@en .
+
+appont:preferWorldFile a owl:DatatypeProperty ;
+    rdfs:label "preferWorldFile"@en ;
+    rdfs:domain appont:GeoreferencedTexture ;
+    rdfs:range xsd:boolean ;
+    skos:definition "Indicates whether the georeference from the image file or the accompanying world file should be preferred."@en .
+
+appont:ring a owl:DatatypeProperty ;
+    rdfs:label "ring"@en ;
+    rdfs:domain appont:TexCoordList ;
+    rdfs:range xsd:anyURI ;
+    skos:definition "Specifies the URIs that point to the LinearRings that are parameterized using the given texture coordinates."@en .
+
+appont:shininess a owl:ObjectProperty ;
+    rdfs:label "shininess"@en ;
+    rdfs:domain appont:X3DMaterial ;
+    rdfs:range appont:DoubleBetween0and1 ;
+    skos:definition "Specifies the sharpness of the specular highlight."@en .
+
+appont:specularColor a owl:ObjectProperty ;
+    rdfs:label "specularColor"@en ;
+    rdfs:domain appont:X3DMaterial ;
+    rdfs:range appont:Color ;
+    skos:definition "Specifies the color of the light directly reflected by the surface geometry object."@en .
+
+appont:textureCoordinates a owl:ObjectProperty ;
+    rdfs:label "textureCoordinates"@en ;
+    rdfs:domain appont:TexCoordList ;
+    rdfs:range appont:DoubleList ;
+    skos:definition "Specifies the coordinates of texture used for parameterization. The texture coordinates are provided separately for each LinearRing of the surface geometry object."@en .
+
+appont:textureType a owl:DatatypeProperty ;
+    rdfs:label "textureType"@en ;
+    rdfs:domain appont:AbstractTexture ;
+    rdfs:range appont:TextureType ;
+    skos:definition "Indicates the specific type of the texture."@en .
+
+appont:theme a owl:DatatypeProperty ;
+    rdfs:label "theme"@en ;
+    rdfs:domain appont:Appearance ;
+    rdfs:range xsd:string ;
+    skos:definition "Specifies the topic of the Appearance. Each Appearance contains surface data for one theme only. Examples of themes are infrared radiation, noise pollution, or earthquake-induced structural stress."@en .
+
+appont:transparency a owl:ObjectProperty ;
+    rdfs:label "transparency"@en ;
+    rdfs:domain appont:X3DMaterial ;
+    rdfs:range appont:DoubleBetween0and1 ;
+    skos:definition "Specifies the degree of transparency of the surface geometry object."@en .
+
+appont:worldToTexture a owl:ObjectProperty ;
+    rdfs:label "worldToTexture"@en ;
+    rdfs:domain appont:TexCoordGen ;
+    rdfs:range appont:TransformationMatrix3x4 ;
+    skos:definition "Specifies the 3x4 transformation matrix that defines the transformation between world coordinates and texture coordinates."@en .
+
+appont:wrapMode a owl:DatatypeProperty ;
+    rdfs:label "wrapMode"@en ;
+    rdfs:domain appont:AbstractTexture ;
+    rdfs:range appont:WrapMode ;
+    skos:definition "Specifies the behaviour of the texture when the texture is smaller than the surface to which it is applied."@en .
+
+appont:mimeType rdfs:label "mimeType"@en ;
+    skos:definition "Specifies the MIME type of the external point cloud file."@en ;
+    schema:domainIncludes appont:AbstractTexture ;
+    schema:rangeIncludes appont:MimeTypeValue .
+
+appont:mimeType skos:definition "Relates to the 2D Point geometry that represents the center of the upper left image pixel in world space."@en ;
+    schema:domainIncludes appont:GeoreferencedTexture ;
+    schema:rangeIncludes gmlowl:Point .
+
+appont:TexCoordList a owl:Class ;
+    rdfs:label "TexCoordList"@en ;
+    rdfs:subClassOf [ a owl:Restriction ;
+            owl:allValuesFrom appont:DoubleList ;
+            owl:onProperty appont:textureCoordinates ],
+        [ a owl:Restriction ;
+            owl:minQualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+            owl:onClass appont:DoubleList ;
+            owl:onProperty appont:textureCoordinates ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom xsd:anyURI ;
+            owl:onProperty appont:ring ],
+        [ a owl:Restriction ;
+            owl:minQualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+            owl:onDataRange xsd:anyURI ;
+            owl:onProperty appont:ring ],
+        appont:AbstractTextureParameterization ;
+    skos:definition "TexCoordList defines texture parameterization using texture coordinates."@en .
+
+appont:TextureType a rdfs:Datatype ;
+    rdfs:label "TextureType"@en ;
+    owl:equivalentClass [ a rdfs:Datatype ;
+            owl:oneOf ( "specific" "typical" "unknown" ) ] ;
+    skos:definition "TextureType enumerates the different texture types."@en .
+
+appont:WrapMode a rdfs:Datatype ;
+    rdfs:label "WrapMode"@en ;
+    owl:equivalentClass [ a rdfs:Datatype ;
+            owl:oneOf ( "none" "wrap" "mirror" "clamp" "border" ) ] ;
+    skos:definition "WrapMode enumerates the different fill modes for textures."@en .
+
+appont:textureParameterization skos:definition "Relates to the texture coordinates or transformation matrices used for parameterization."@en ;
+    schema:domainIncludes appont:ParameterizedTexture,
+        appont:TextureAssociation ;
+    schema:rangeIncludes appont:AbstractTextureParameterization,
+        appont:TextureAssociation .
+
+appont:ColorPlusOpacity a owl:Class ;
+    rdfs:label "ColorPlusOpacity"@en ;
+    rdfs:subClassOf appont:DoubleBetween0and1List ;
+    skos:definition "Color is a list of four double values between 0 and 1 defining an RGBA color value. Opacity value of 0 means transparent."@en .
+
+appont:GeoreferencedTexture a owl:Class ;
+    rdfs:label "GeoreferencedTexture"@en ;
+    rdfs:subClassOf [ a owl:Restriction ;
+            owl:allValuesFrom xsd:anyURI ;
+            owl:onProperty appont:target ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom xsd:boolean ;
+            owl:onProperty appont:preferWorldFile ],
+        [ a owl:Restriction ;
+            owl:maxQualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+            owl:onClass gmlowl:Point ;
+            owl:onProperty appont:mimeType ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom gmlowl:Point ;
+            owl:onProperty appont:mimeType ],
+        [ a owl:Restriction ;
+            owl:maxQualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+            owl:onDataRange xsd:boolean ;
+            owl:onProperty appont:preferWorldFile ],
+        [ a owl:Restriction ;
+            owl:maxQualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+            owl:onClass appont:TransformationMatrix2x2 ;
+            owl:onProperty appont:orientation ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom appont:TransformationMatrix2x2 ;
+            owl:onProperty appont:orientation ],
+        appont:AbstractTexture ;
+    owl:disjointWith appont:ParameterizedTexture ;
+    skos:definition "A GeoreferencedTexture is a texture that uses a planimetric projection. It contains an implicit parameterization that is either stored within the image file, an accompanying world file or specified using the orientation and referencePoint elements."@en .
+
+appont:TextureAssociation a owl:Class ;
+    rdfs:label "TextureAssociation"@en ;
+    rdfs:subClassOf [ a owl:Restriction ;
+            owl:allValuesFrom xsd:anyURI ;
+            owl:onProperty appont:target ],
+        [ a owl:Restriction ;
+            owl:onDataRange xsd:anyURI ;
+            owl:onProperty appont:target ;
+            owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom appont:AbstractTextureParameterization ;
+            owl:onProperty appont:textureParameterization ],
+        [ a owl:Restriction ;
+            owl:onClass appont:AbstractTextureParameterization ;
+            owl:onProperty appont:textureParameterization ;
+            owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ] ;
+    skos:definition "TextureAssociation denotes the relation of a texture to a surface geometry object."@en .
+
+appont:target rdfs:label "target"@en ;
+    skos:definition "Specifies the URI that points to the surface geometry object to which the texture is applied."@en,
+        "Specifies the URI that points to the surface geometry objects to which the material is applied."@en,
+        "Specifies the URI that points to the surface geometry objects to which the texture is applied."@en ;
+    schema:domainIncludes appont:GeoreferencedTexture,
+        appont:TextureAssociation,
+        appont:X3DMaterial ;
+    schema:rangeIncludes xsd:anyURI .
+
+appont:AbstractSurfaceData a owl:Class ;
+    rdfs:label "AbstractSurfaceData"@en ;
+    iso19150-2:isAbstract true ;
+    rdfs:subClassOf [ a owl:Restriction ;
+            owl:allValuesFrom xsd:boolean ;
+            owl:onProperty appont:isFront ],
+        [ a owl:Restriction ;
+            owl:maxQualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+            owl:onDataRange xsd:boolean ;
+            owl:onProperty appont:isFront ],
+        iso19109:AnyFeature ;
+    skos:definition "AbstractSurfaceData is the abstract superclass for different kinds of textures and material."@en .
+
+appont:AbstractTextureParameterization a owl:Class ;
+    rdfs:label "AbstractTextureParameterization"@en ;
+    iso19150-2:isAbstract true ;
+    skos:definition "AbstractTextureParameterization is the abstract superclass for different kinds of texture parameterizations."@en .
+
+appont:AbstractTexture a owl:Class ;
+    rdfs:label "AbstractTexture"@en ;
+    iso19150-2:isAbstract true ;
+    rdfs:subClassOf [ a owl:Restriction ;
+            owl:allValuesFrom xsd:anyURI ;
+            owl:onProperty appont:imageURI ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom appont:ColorPlusOpacity ;
+            owl:onProperty appont:borderColor ],
+        [ a owl:Restriction ;
+            owl:onDataRange xsd:anyURI ;
+            owl:onProperty appont:imageURI ;
+            owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ],
+        [ a owl:Restriction ;
+            owl:maxQualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+            owl:onClass appont:MimeTypeValue ;
+            owl:onProperty appont:mimeType ],
+        [ a owl:Restriction ;
+            owl:maxQualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+            owl:onDataRange appont:WrapMode ;
+            owl:onProperty appont:wrapMode ],
+        [ a owl:Restriction ;
+            owl:maxQualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+            owl:onDataRange appont:TextureType ;
+            owl:onProperty appont:textureType ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom appont:TextureType ;
+            owl:onProperty appont:textureType ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom appont:WrapMode ;
+            owl:onProperty appont:wrapMode ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom appont:MimeTypeValue ;
+            owl:onProperty appont:mimeType ],
+        [ a owl:Restriction ;
+            owl:maxQualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+            owl:onClass appont:ColorPlusOpacity ;
+            owl:onProperty appont:borderColor ],
+        appont:AbstractSurfaceData ;
+    owl:disjointWith appont:X3DMaterial ;
+    skos:definition "AbstractTexture is the abstract superclass to represent the common attributes of the classes ParameterizedTexture and GeoreferencedTexture."@en .
+
+appont:Color a owl:Class ;
+    rdfs:label "Color"@en ;
+    rdfs:subClassOf appont:DoubleBetween0and1List ;
+    owl:disjointWith appont:ColorPlusOpacity ;
+    skos:definition "Color is a list of three double values between 0 and 1 defining an RGB color value."@en .
+
+appont:X3DMaterial a owl:Class ;
+    rdfs:label "X3DMaterial"@en ;
+    rdfs:subClassOf [ a owl:Restriction ;
+            owl:allValuesFrom xsd:boolean ;
+            owl:onProperty appont:isSmooth ],
+        [ a owl:Restriction ;
+            owl:maxQualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+            owl:onClass appont:Color ;
+            owl:onProperty appont:emissiveColor ],
+        [ a owl:Restriction ;
+            owl:maxQualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+            owl:onClass appont:DoubleBetween0and1 ;
+            owl:onProperty appont:transparency ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom appont:DoubleBetween0and1 ;
+            owl:onProperty appont:ambientIntensity ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom appont:Color ;
+            owl:onProperty appont:emissiveColor ],
+        [ a owl:Restriction ;
+            owl:maxQualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+            owl:onClass appont:Color ;
+            owl:onProperty appont:specularColor ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom appont:DoubleBetween0and1 ;
+            owl:onProperty appont:shininess ],
+        [ a owl:Restriction ;
+            owl:maxQualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+            owl:onDataRange xsd:boolean ;
+            owl:onProperty appont:isSmooth ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom appont:Color ;
+            owl:onProperty appont:specularColor ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom appont:Color ;
+            owl:onProperty appont:diffuseColor ],
+        [ a owl:Restriction ;
+            owl:maxQualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+            owl:onClass appont:DoubleBetween0and1 ;
+            owl:onProperty appont:ambientIntensity ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom xsd:anyURI ;
+            owl:onProperty appont:target ],
+        [ a owl:Restriction ;
+            owl:maxQualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+            owl:onClass appont:Color ;
+            owl:onProperty appont:diffuseColor ],
+        [ a owl:Restriction ;
+            owl:maxQualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+            owl:onClass appont:DoubleBetween0and1 ;
+            owl:onProperty appont:shininess ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom appont:DoubleBetween0and1 ;
+            owl:onProperty appont:transparency ],
+        appont:AbstractSurfaceData ;
+    skos:definition "X3DMaterial defines properties for surface geometry objects based on the material definitions from the X3D and COLLADA standards."@en .
+
+appont:TransformationMatrix2x2 a owl:Class ;
+    rdfs:label "TransformationMatrix2x2"@en ;
+    rdfs:subClassOf appont:DoubleList ;
+    skos:definition "TransformationMatrix2x2 is a 2 by 2 matrix represented as a list of four double values in row major order."@en .
+
+appont:TransformationMatrix3x4 a owl:Class ;
+    rdfs:label "TransformationMatrix3x4"@en ;
+    rdfs:subClassOf appont:DoubleList ;
+    skos:definition "TransformationMatrix3x4 is a 3 by 4 matrix represented as a list of twelve double values in row major order."@en .
+
+appont:TransformationMatrix4x4 a owl:Class ;
+    rdfs:label "TransformationMatrix4x4"@en ;
+    rdfs:subClassOf appont:DoubleList ;
+    skos:definition "TransformationMatrix4x4 is a 4 by 4 matrix represented as a list of sixteen double values in row major order."@en .
+
+appont:DoubleList a owl:Class ;
+    rdfs:label "DoubleList"@en ;
+    rdfs:subClassOf [ a owl:Restriction ;
+                          owl:allValuesFrom xsd:double ;
+                          owl:onProperty appont:list ],
+                        [ a owl:Restriction ;
+                              owl:onDataRange xsd:double ;
+                              owl:onProperty appont:list ;
+                              owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ] ;
+    skos:definition "DoubleList is an ordered sequence of double values."@en .
+
+appont:list a owl:DatatypeProperty ;
+    rdfs:label "list"@en ;
+    rdfs:domain appont:DoubleList ;
+    rdfs:range xsd:double ;
+    skos:definition "Specifies the list of double values."@en .
+
+appont:DoubleBetween0and1 a owl:Class ;
+    rdfs:label "DoubleBetween0and1"@en ;
+    skos:definition "DoubleBetween0and1 is a basic type for values, which are greater or equal than 0 and less or equal than 1. The type is used for color encoding, for example."@en .
+
+appont:DoubleBetween0and1List a owl:Class ;
+    rdfs:label "DoubleBetween0and1List"@en ;
+    rdfs:subClassOf [ a owl:Restriction ;
+                          owl:allValuesFrom appont:DoubleBetween0and1 ;
+                          owl:onProperty appont:opList ],
+                        [ a owl:Restriction ;
+                              owl:onClass appont:DoubleBetween0and1 ;
+                              owl:onProperty appont:opList ;
+                              owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ] ;
+    skos:definition "DoubleBetween0and1List is a basic type that represents a list of double values greater or equal than 0 and less or equal than 1. The type is used for color encoding, for example."@en .
+
+appont:MimeTypeValue a owl:Class ;
+    rdfs:label "MimeTypeValue"@en ;
+    rdfs:subClassOf skos:Concept ;
+    skos:definition "MimeTypeValue is a code list used to specify the MIME type of a referenced resource."@en .
+
+appont:textureParameterization  rdf:type owl:ObjectProperty; rdfs:label "textureParameterization"@en .
+
+appont:mimeType rdf:type owl:ObjectProperty; rdfs:label "mimeType"@en.
+
+appont:referencePoint rdfs:subPropertyOf geo:hasGeometry .
+
+appont:target  rdf:type owl:DatatypeProperty; rdfs:label "target"@en.
+
+appont:opList  rdf:type owl:ObjectProperty; rdfs:label "list"@en .
+
+[] a owl:AllDisjointClasses ;
+    owl:members ( appont:TransformationMatrix2x2 appont:TransformationMatrix3x4 appont:TransformationMatrix4x4 ) .
