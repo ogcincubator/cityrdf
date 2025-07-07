@@ -244,10 +244,10 @@ appont:GeoreferencedTexture a owl:Class ;
         [ a owl:Restriction ;
             owl:maxQualifiedCardinality "1"^^xsd:nonNegativeInteger ;
             owl:onClass gmlowl:Point ;
-            owl:onProperty appont:mimeType ],
+            owl:onProperty appont:referencePoint ],
         [ a owl:Restriction ;
             owl:allValuesFrom gmlowl:Point ;
-            owl:onProperty appont:mimeType ],
+            owl:onProperty appont:referencePoint ],
         [ a owl:Restriction ;
             owl:maxQualifiedCardinality "1"^^xsd:nonNegativeInteger ;
             owl:onDataRange xsd:boolean ;
@@ -468,6 +468,8 @@ appont:MimeTypeValue a owl:Class ;
 appont:textureParameterization  rdf:type owl:ObjectProperty; rdfs:label "textureParameterization"@en .
 
 appont:mimeType rdf:type owl:ObjectProperty; rdfs:label "mimeType"@en.
+
+appont:referencePoint rdf:type owl:ObjectProperty; rdfs:label "referencePoint"@en .
 
 appont:referencePoint rdfs:subPropertyOf geo:hasGeometry .
 
