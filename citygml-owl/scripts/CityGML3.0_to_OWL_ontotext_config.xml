@@ -139,12 +139,12 @@
           <rule name="rule-owl-cls-codelist-19150-2"/>
           <!-- <rule name="rule-owl-cls-codelist-19150-2-skos-collection"/> -->
           <rule name="rule-owl-cls-generalization"/>
-          <rule name="rule-owl-cls-disjoint-classes"/>
+          <!-- <rule name="rule-owl-cls-disjoint-classes"/> -->
           <rule name="rule-owl-cls-union"/>
           <rule name="rule-owl-prop-general"/>
           <rule name="rule-owl-prop-iso191502-naming"/>
-          <!--<rule name="rule-owl-prop-localScopeAll"/> -->
-          <rule name="rule-owl-prop-globalScopeAttributes"/>
+          <rule name="rule-owl-prop-localScopeAll"/>
+          <!--<rule name="rule-owl-prop-globalScopeAttributes"/> -->
           <!-- <rule name="rule-owl-prop-globalScopeByUniquePropertyName"/> -->
           <!-- <rule name="rule-owl-prop-globalScopeByConversionParameter"/> -->
           <rule name="rule-owl-prop-multiplicityAsQualifiedCardinalityRestriction"/>
