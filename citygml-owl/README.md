@@ -5,6 +5,10 @@ The intention is to set this up as a proof of concept that can be migrated to th
 
 We propose **CityRDF** as a name for the target family of ontologies. 
 
+# Acknowledgements
+
+CityRDF was conceived, developed and used first in frame of [EU *ACCORD* project "Automated Compliance Checks for Construction, Renovation or Demolition Works"](https://accordproject.eu/) (grant agreement 101056973, @nataschake, @ar-chad) and in frame of EU [*CHEKdbp* project "Change Toolkit for Digital Building Permits"](https://chekdbp.eu)  (grant agreement 101058559, @rob-metalinkage, @avillar).
+
 ## Background
 
 A proposal to implement a CityGML OWL representation to support RDF encodings was presented to the CityGML Working Group in June 2023.

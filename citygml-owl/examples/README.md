@@ -7,4 +7,4 @@ In `lod3-sample-fail.*` used `bldg:measuredHeight` and prefixes of CityGML 2.0 -
 
 In `lod3-sample-ok.*` used `con:height` and prefixes of CityGML 3.0. There should not be errors of validation.
 
-The conversion from gml to ttl is done with xSPARQL script.
+The conversion from GML to RDF/TTL is done with [xSPARQL script](https://github.com/Accord-Project/Tegel-scripts/blob/main/ifc/cityrdf_typedGenAttrs-withIDs-citygml3.xsparql), created in frame of [EU ACCORD project "Automated Compliance Checks for Construction, Renovation or Demolition Works", 2022-2025](https://accordproject.eu) (grant agreement 101056973).
